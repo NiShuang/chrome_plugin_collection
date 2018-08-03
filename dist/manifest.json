@@ -1,0 +1,69 @@
+{
+    "manifest_version": 2,
+    "name": "Insta360数据采集插件",
+    "version": "1.0.0",
+    "description": "Insta360 Chrome Plugins",
+    "icons": {
+        "16": "image/favicon-96x96.png",
+        "48": "image/favicon-96x96.png",
+        "128": "image/favicon-96x96.png"
+    },
+    "background": {
+        "scripts": [
+            "js/background.js"
+        ]
+    },
+    "browser_action": {
+        "default_icon": "image/favicon-96x96.png",
+        "default_title": "Insta360 Chrome Plugins",
+        "default_popup": "page/popup.html"
+    },
+    // 需要直接注入页面的JS
+    "content_scripts": [
+        {
+            "matches": [
+                "http://store.insta360.com/*",
+                "https://store.insta360.com/*"
+            ],
+            "js": [
+                "assets/jquery.min.js",
+                "js/store.js"
+            ],
+            "run_at": "document_end"
+        },
+        {
+            "matches": [
+                "https://www.baidu.com/*"
+            ],
+            "js": [
+                "assets/jquery.min.js",
+                "js/baidu.js"
+            ],
+            "run_at": "document_end"
+        }
+    ],
+    // 权限申请
+    "permissions": [
+        "contextMenus", // 右键菜单
+        "tabs", // 标签
+        "notifications", // 通知
+        "webRequest", // web请求
+        "webRequestBlocking",
+        "storage", // 插件本地存储
+        "http://*/*", // 可以通过executeScript或者insertCSS访问的网站
+        "https://*/*" // 可以通过executeScript或者insertCSS访问的网站
+    ],
+    // 普通页面能够直接访问的插件资源列表，如果不设置是无法直接访问的
+    "web_accessible_resources": [
+        "js/inject.js"
+    ],
+    "options_page": "page/options.html",
+    "options_ui": {
+        "page": "page/options.html",
+        "chrome_style": true
+    },
+    "omnibox": {
+        "keyword": "insta360"
+    },
+    "devtools_page": "page/devtools.html"
+}
