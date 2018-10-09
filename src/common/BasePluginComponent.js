@@ -16,8 +16,12 @@ class BasePluginComponent {
             config.listener();
         }
         else {
-            alert('无法响应插件操作')
+            this.onFailToHandle();
         }
+    }
+
+    onFailToHandle(){
+        alert('无法响应插件操作，请在对应的页面使用插件')
     }
 
     initListener() {

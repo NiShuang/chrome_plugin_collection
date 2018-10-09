@@ -33,11 +33,95 @@
         },
         {
             "matches": [
-                "https://www.baidu.com/*"
+                "https://sycm.taobao.com/*"
             ],
             "js": [
                 "assets/jquery.min.js",
-                "js/baidu.js"
+                "js/tmall-commerce.js"
+            ],
+            "run_at": "document_end"
+        },
+        {
+            "matches": [
+                "http://kf.jd.com/*"
+            ],
+            "js": [
+                "assets/jquery.min.js",
+                "js/jd-service.js"
+            ],
+            "run_at": "document_end"
+        },
+        {
+            "matches": [
+                "https://newkf.topchitu.com/*"
+            ],
+            "js": [
+                "assets/jquery.min.js",
+                "js/tmall-service.js"
+            ],
+            "run_at": "document_end"
+        },
+        {
+            "matches": [
+                "https://sz.jd.com/*"
+            ],
+            "js": [
+                "assets/jquery.min.js",
+                "js/jd-commerce.js"
+            ],
+            "run_at": "document_end"
+        },
+        {
+            "matches": [
+                "https://sellercentral-europe.amazon.com/*",
+                "https://sellercentral-japan.amazon.com/*",
+                "https://sellercentral.amazon.com/*"
+            ],
+            "js": [
+                "assets/jquery.min.js",
+                "js/amazon-commerce.js",
+                "js/amazon-ad.js"
+            ],
+            "run_at": "document_end"
+        },
+        {
+            "matches": [
+                "https://subway.simba.taobao.com/*"
+            ],
+            "js": [
+                "assets/jquery.min.js",
+                "js/tmall-ad.js"
+            ],
+            "run_at": "document_end"
+        },
+        {
+            "matches": [
+                "https://jzt.jd.com/*"
+            ],
+            "js": [
+                "assets/jquery.min.js",
+                "js/jd-ad.js"
+            ],
+            "run_at": "document_end"
+        },
+        {
+            "matches": [
+                "https://tuiguang.baidu.com/*",
+                "http://fengchao.baidu.com/*"
+            ],
+            "js": [
+                "assets/jquery.min.js",
+                "js/baidu-ad.js"
+            ],
+            "run_at": "document_end"
+        },
+        {
+            "matches": [
+                "https://adplus.umeng.com/*"
+            ],
+            "js": [
+                "assets/jquery.min.js",
+                "js/guangxiaobao-ad.js"
             ],
             "run_at": "document_end"
         }
