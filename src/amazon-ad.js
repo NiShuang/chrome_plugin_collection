@@ -84,7 +84,8 @@ class DataCollector extends BasePluginComponent {
     var dateSection;
     var fromDate;
     var toDate;
-    if ($(".sc-bdVaJa.fqLnct").eq(1).text() === "日期范围 - 最近 7 天") {
+    var dateText = $("#cm-app div div div:nth-child(2) button").eq(2).text()
+    if (dateText === "日期范围 - 最近 7 天") {
       if (new Date().getDay() !== 1) {
         alert("请选择 指定日期区间（必须为周一到周日, 7天）");
         return;
@@ -92,7 +93,7 @@ class DataCollector extends BasePluginComponent {
         postData.records[0].data.date = this.getLastWeekMonday();
       }
     } else {
-      dateSection = $(".sc-bdVaJa.fqLnct").eq(1).text().split("-").slice(1);
+      dateSection = dateText.split("-").slice(1);
       if (dateSection.length === 1) {
         console.log(dateSection.length);
         alert("请选择 指定日期区间（必须为周一到周日, 7天）");

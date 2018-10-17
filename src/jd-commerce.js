@@ -24,7 +24,7 @@ class TaobaoDataCollector extends BasePluginComponent {
       return;
     }
 
-    // 判断数据所在列，京东交易抓取访客数(visitor), 下单客户数(buyer), 商品关注人数(collect_count), 加购商品件数(cart_count)
+    // 判断数据所在列，京东交易抓取访客数(visitor), 成交客户数(buyer), 商品关注人数(collect_count), 加购商品件数(cart_count)
     let dataInColumn = {
       visitor: -1,
       buyer: -1,
@@ -39,7 +39,7 @@ class TaobaoDataCollector extends BasePluginComponent {
           dataInColumn.visitor = index;
           break;
         }
-        case "下单客户数-全部渠道": {
+        case "成交客户数-全部渠道": {
           dataInColumn.buyer = index;
           break;
         }
@@ -59,7 +59,7 @@ class TaobaoDataCollector extends BasePluginComponent {
     if (dataInColumn.buyer === -1 || dataInColumn.visitor === -1 || 
         dataInColumn.collect_count === -1 || dataInColumn.cart_count === -1) 
     {
-      alert("请勾选正确的数据：访客数,下单客户数,商品关注人数,加购商品件数");
+      alert("请勾选正确的数据：访客数,成交客户数,商品关注人数,加购商品件数");
       return;
     }
 
