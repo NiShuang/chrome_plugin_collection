@@ -1,11 +1,16 @@
 import BasePluginComponent from './common/BasePluginComponent'
 import { ContextMenus, ContextMenuConfig } from './common/context-menu'
 
-class BaiduDataCollector extends BasePluginComponent {
-
+class DataCollector extends BasePluginComponent {
+  
+  constructor() {
+    super();
+    this.test = this.test.bind(this);
+  }
+ 
   getContextMenuConfig() {
     return [
-      new ContextMenuConfig(ContextMenus.GUANGXIAOBAO_AD, this.test)
+      new ContextMenuConfig(ContextMenus.GUANGXIAOBAO_ORDER, this.test)
     ];
   }
 
@@ -15,22 +20,23 @@ class BaiduDataCollector extends BasePluginComponent {
 
   collect = (currentList) => {
     // 数据为空无需采集
-    if ($(".table-section tbody tr").length === 1) {
+    if ($(".table-section tbody tr.order-name").length < 1) {
       return;
     }
 
     // 数据格式
     const record = {
-      "event": "gxb_ad_data",
+      "event": "gxb_order_data",
       "data": {
         "platform": "gxb",  // 写死。固定不变
         "account": "Insta360",  // 推广计划,左上角有
-        "date": "2018-07-07",
-        "campaign_name": "微博Daily Content-长板女孩",
-        "order": 2,
-        "amount": 100.2
+        "campaign_name": "",
+        "order_id": "",
+        "create_time": "",
+        "deal_time": "",
+        "amount": 0
       },
-      "timestamp": "1234567890123"
+      "timestamp": ""
     }
 
     const postForm = {
@@ -40,35 +46,19 @@ class BaiduDataCollector extends BasePluginComponent {
 
     const account = $(".monitor-select-wrapper input").attr("value");
 
-    const colMap = {};
-    $(".table-section thead th").each((i, v) => {
-      switch($(v).children("em").text()) {
-        case "流量发生日期": {
-          colMap["date"] = i;
-          break;
-        }
-        case "成交订单数": {
-          colMap["order"] = i;
-        }
-        case "成交金额": {
-          colMap["amount"] = i;
-        }
-        default : break;
-      }
-    })
-
     // 数据采集
-    const dataCols = $(".table-section tbody tr").slice(1);
+    const dataCols = $(".table-section tbody tr.order-name");
     dataCols.each((i, v) => {
       let record = {
-        "event": "gxb_ad_data",
+        "event": "gxb_order_data",
         "data": {
           "platform": "gxb",  // 写死。固定不变
           "account": account,  // 推广计划,左上角有
-          "date": $(v).children("td").eq(colMap["date"]).children("span").first().text(),
           "campaign_name": $(currentList).text(),
-          "order": Number($(v).children("td").eq(colMap["order"]).children("span").first().text().replace(/,/g, '')),
-          "amount": Number($(v).children("td").eq(colMap["amount"]).children("span").first().text().replace(/,/g, ''))
+          "order_id": $(v).children("td").first().children("span").first().text(),
+          "create_time": $(v).children("td").eq(2).children("p").eq(0).children("span").eq(1).text(),
+          "deal_time": $(v).children("td").eq(2).children("p").eq(1).children("span").eq(1).text(),
+          "amount": Number($(v).children("td").eq(3).children("span").first().children("span").first().text())
         },
         "timestamp": new Date().getTime()
       }
@@ -91,12 +81,20 @@ class BaiduDataCollector extends BasePluginComponent {
         console.log("当前页抓取失败")
       }
     });
+
+    const next = $(".control-item.c-front.disable").first();
+    if (next === undefined) {
+      $(".control-item.c-front").first().click();
+      setTimeout(() => {
+        this.collect(currentList);
+      }, 1000);
+    }
   }
 
   test = () => {
     // 路径判断
-    if (!$(".g-page-title > a").eq(2) || $(".g-page-title > a").eq(2).text() !== "趋势分析") {
-      alert("请选择正确路径：推广计划 -> 选择 Insta360 -> 行为分析 -> 成交");
+    if (!$(".g-page-title > a").eq(2) || $(".g-page-title > a").eq(2).text() !== "订单分析") {
+      alert("请选择正确路径：推广计划 -> 选择 Insta360 -> 行为分析 -> 成交 -> 订单");
       return;
     }
 
@@ -121,4 +119,4 @@ class BaiduDataCollector extends BasePluginComponent {
 
 }
 
-new BaiduDataCollector().start();
+new DataCollector().start();

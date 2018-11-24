@@ -121,7 +121,8 @@
             ],
             "js": [
                 "assets/jquery.min.js",
-                "js/guangxiaobao-ad.js"
+                "js/guangxiaobao-ad.js",
+                "js/guangxiaobao-order.js"
             ],
             "run_at": "document_end"
         }

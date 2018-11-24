@@ -30,6 +30,9 @@ const ContextMenus = {
     },
     GUANGXIAOBAO_AD: {
         key: "guangxiaobao-ad", title: "抓取【广效宝-推广】数据"
+    },
+    GUANGXIAOBAO_ORDER: {
+        key: "guangxiaobao-order", title: "抓取【广效宝-订单】数据"
     }
 }
 
