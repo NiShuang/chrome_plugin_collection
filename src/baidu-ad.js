@@ -40,50 +40,33 @@ class BaiduDataCollector extends BasePluginComponent {
         }
 
         // 路径判断, 正确路径: 推广报告 -> 基础报告 -> 单元报告
-        if (!window.location.hash.includes("/dataCenter/index~report=unitReport")) {
+        if (!window.location.hash.includes("/adgroup")) {
             alert("请选择 推广报告 -> 基础报告 -> 单元报告");
             return;
         }
 
-        // 条件筛选, 正确条件: 推广设备：全部，时间单位：分日，投放网络：全部，购买方式：全部，单元筛选：全部 
-        if ($("#module-dataCenter-commonSubModule-filterWidget-filters-device > .dc-common-filterWidget-category-item-selected").text().trim() !== "全部") {
-            alert("推广设备请选择全部");
-            console.log($("#module-dataCenter-commonSubModule-filterWidget-filters-device > .dc-common-filterWidget-category-item-selected").text());
-            return;
-        }
-        if ($("#module-dataCenter-commonSubModule-filterWidget-filters-timedim > .dc-common-filterWidget-category-item-selected").text().trim() !== "分日") {
+        // 条件筛选, 时间单位：分日，细分： 无
+        if (!$(".unitTime-dropdown-box-container > button > span").text().trim().includes("分日")) {
             alert("时间单位请选择分日");
             return;
         }
-        if ($("#module-dataCenter-commonSubModule-filterWidget-filters-platform > .dc-common-filterWidget-category-item-selected").text().trim() !== "全部") {
-            alert("投放网络请选择全部");
-            return;
-        }
-        if ($("#module-dataCenter-commonSubModule-filterWidget-filters-targetingType > .dc-common-filterWidget-category-item-selected").text().trim() !== "全部") {
-            alert("购买方式请选择全部");
-            return;
-        }
-        if ($("#module-dataCenter-commonSubModule-filterWidget-filters-material > .dc-common-filterWidget-material-item-selected").text().trim() !== "全部") {
-            alert("单元筛选请选择全部");
+        const split = $(".splitDimension-dropdown-box-container > button > span").text().trim() 
+        if (!(split.includes("无")||split === "细分")) {
+            alert("细分请选择无");
             return;
         }
 
-        // 数据完整性判断, 数据包括: 时间、推广单元、推广单元id（在元素属性里）、展现、点击、消费、账号名
+        // 数据完整性判断, 数据包括: 日期、推广单元、推广单元id（在元素属性里）、展现、点击、消费
         var cols = 0;
-        $(".ui-table-head th").each((i, v) => {
-            switch ($(v).children(".ui-table-hcell-text").text().trim()) {
-                case "时间": {
+        $(".fy-table-thead:last tr th").each((i, v) => {
+            switch ($(v).find("span div div:first span").text().trim()) {
+                case "日期": {
                     colMap[i] = "date";
                     cols++;
                     break
                 }
                 case "推广单元": {
                     colMap[i] = "campaign_name";
-                    cols++;
-                    break
-                }
-                case "账户": {
-                    colMap[i] = "account";
                     cols++;
                     break
                 }
@@ -105,29 +88,28 @@ class BaiduDataCollector extends BasePluginComponent {
                 default: break
             }
         })
-        if (cols !== 6) {
-            alert("请点击自定义列添加完整的数据, 包括: 时间，推广单元，展现，点击，消费，账户");
+        if (cols !== 5) {
+            alert("请点击自定义列添加完整的数据, 包括: 日期，推广单元，展现，点击，消费");
             return;
         }
 
         // 数据采集
-        $(".ui-table-row tr").each((i, v) => {
+        $(".fy-table-tbody:last tr").each((i, v) => {
             let record = {
                 "event": "baidu_ad_data",
                 "data": {
                     "platform": "baidu",
                     "campaign_type": "search",
+                    "campaign_id": "",
+                    "account": $(".header-operator-name").text()
                 },
                 "timestamp": new Date().getTime()
             };
             $(v).children("td").each((i, v) => {
-                if (colMap[i] && colMap[i] === "campaign_name") {
-                    record.data[colMap[i]] = $(v).find(".dc-report-table-item").children("a").attr("title");
-                    record.data["campaign_id"] = Number($(v).find(".dc-report-table-item").children("a").attr("expand").slice(9));
-                } else if (colMap[i] && (colMap[i] === "spend" || colMap[i] === "impression" || colMap[i] === "click")) {
-                    record.data[colMap[i]] = Number($(v).find(".dc-report-table-item").children("span").attr("title"));
+                if (colMap[i] && (colMap[i] === "spend" || colMap[i] === "impression" || colMap[i] === "click")) {
+                    record.data[colMap[i]] = Number($(v).find("div span").text());
                 } else if (colMap[i]) {
-                    record.data[colMap[i]] = $(v).find(".dc-report-table-item").children("span").attr("title");
+                    record.data[colMap[i]] = $(v).find("div span").text();
                 }
             })
             postData.records.push(record);
@@ -143,8 +125,7 @@ class BaiduDataCollector extends BasePluginComponent {
             method: "POST",
             data: postData,
             success: function () {
-                if ($(".ui-pager-item-extend").length === 2 ||
-                    ($(".ui-pager-item-extend").length === 1 && $(".ui-pager-item-extend").text() === "下一页")) {
+                if (!$("input:last").attr("disabled")) {
                     alert("当前页数据抓取成功, 请点击下一页继续抓取");
                 } else {
                     alert("数据抓取完成");
