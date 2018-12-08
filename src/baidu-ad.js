@@ -32,14 +32,13 @@ class BaiduDataCollector extends BasePluginComponent {
             "app": "chrome_plugin",
             "records": []
         }
-
         // URL判断
         if (!window.location.href.includes("fengchao.baidu.com")) {
             alert("请进入搜索推广再采集数据");
             return;
         }
 
-        if (!window.location.hash.includes("/adgroup")) {
+        if (!window.location.href.includes("adgroup")) {
             alert("请选择 报告 -> 常用报告 -> 单元报告");
             return;
         }
