@@ -39,9 +39,8 @@ class BaiduDataCollector extends BasePluginComponent {
             return;
         }
 
-        // 路径判断, 正确路径: 推广报告 -> 基础报告 -> 单元报告
         if (!window.location.hash.includes("/adgroup")) {
-            alert("请选择 推广报告 -> 基础报告 -> 单元报告");
+            alert("请选择 报告 -> 常用报告 -> 单元报告");
             return;
         }
 

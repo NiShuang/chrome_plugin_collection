@@ -107,7 +107,7 @@
         {
             "matches": [
                 "https://tuiguang.baidu.com/*",
-                "http://fengchao.baidu.com/*"
+                "https://fengchao.baidu.com/*"
             ],
             "js": [
                 "assets/jquery.min.js",
