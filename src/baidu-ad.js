@@ -123,7 +123,7 @@ class BaiduDataCollector extends BasePluginComponent {
             method: "POST",
             data: postData,
             success: function () {
-                if (!$("input:last").attr("disabled")) {
+                if (!$("input:last").prop("disabled")) {
                     alert("当前页数据抓取成功, 请点击下一页继续抓取");
                 } else {
                     alert("数据抓取完成");
