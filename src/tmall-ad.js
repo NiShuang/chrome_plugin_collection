@@ -85,8 +85,8 @@ class BaiduDataCollector extends BasePluginComponent {
       }
       let dateFrom = new Date(dateSection[0].trim());
       let dateTo = new Date(dateSection[1].trim())
-      if (dateSection.length === 1 || dateFrom.getDay() !== 1 ||
-        dateTo.getDate() - dateFrom.getDate() !== 6) {
+      if (dateSection.length === 1 || dateFrom.getDay() !== 1 || dateTo.getDay() !== 0 ||
+        dateTo.getTime() - dateFrom.getTime() > 604800000) {
         alert("请选择 上周(周一至周日)（或者自己指定日期区间，必须为周一到周日）");
         return;
       }
@@ -94,8 +94,8 @@ class BaiduDataCollector extends BasePluginComponent {
     }
 
 
-    $(".infos-lists td").each((i, v) => {
-      switch ($(v).children("span").text()) {
+    $(".infos-listsNew td").each((i, v) => {
+      switch ($(v).children("div").children("span").text()) {
         case "花费": {
           let cost = $(v).children("p.text").text().trim().replace(/￥|,/g, '');
           postData.records[0].data.cost = Number.parseFloat(cost);
