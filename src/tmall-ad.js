@@ -97,27 +97,27 @@ class BaiduDataCollector extends BasePluginComponent {
     $(".infos-listsNew td").each((i, v) => {
       switch ($(v).children("div").children("span").text()) {
         case "花费": {
-          let cost = $(v).children("p.text").text().trim().replace(/￥|,/g, '');
+          let cost = $(v).children("div").children("p.text").text().trim().replace(/￥|,/g, '');
           postData.records[0].data.cost = Number.parseFloat(cost);
           break;
         }
         case "总成交金额": {
-          let revenue = $(v).children("p.text").text().trim().replace(/￥|,/g, '');
+          let revenue = $(v).children("div").children("p.text").text().trim().replace(/￥|,/g, '');
           postData.records[0].data.revenue = Number.parseFloat(revenue);
           break;
         }
         case "展现量": {
-          let impressions = $(v).children("p.text").text().trim().replace(/,/g, '');
+          let impressions = $(v).children("div").children("p.text").text().trim().replace(/,/g, '');
           postData.records[0].data.impressions = Number.parseInt(impressions);
           break;
         }
         case "点击量": {
-          let clicks = $(v).children("p.text").text().trim().replace(/,/g, '');
+          let clicks = $(v).children("div").children("p.text").text().trim().replace(/,/g, '');
           postData.records[0].data.clicks = Number.parseInt(clicks);
           break;
         }
         case "总成交笔数": {
-          let orders = $(v).children("p.text").text().trim().replace(/,/g, '');
+          let orders = $(v).children("div").children("p.text").text().trim().replace(/,/g, '');
           postData.records[0].data.orders = Number.parseInt(orders);
           break;
         }
