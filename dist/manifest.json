@@ -77,8 +77,7 @@
                 "https://sellercentral-japan.amazon.com/*",
                 "https://sellercentral.amazon.com/*",
                 "https://sellercentral.amazon.co.jp/*",
-                "https://sellercentral.amazon",
-                "https://sellercentral*"
+                "https://sellercentral.amazon/*"
             ],
             "js": [
                 "assets/jquery.min.js",
