@@ -84,7 +84,7 @@ class DataCollector extends BasePluginComponent {
     var dateSection;
     var fromDate;
     var toDate;
-    var dateText = $("#cm-app div div div:nth-child(2) button").eq(2).text()
+    var dateText = $("[data-e2e-id='dateRangeFilter'] div button").text()
     if (dateText === "日期范围 - 最近 7 天") {
       if (new Date().getDay() !== 1) {
         alert("请选择 指定日期区间（必须为周一到周日, 7天）");
