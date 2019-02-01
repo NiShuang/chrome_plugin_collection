@@ -28,7 +28,7 @@ class BaiduDataCollector extends BasePluginComponent {
         }
 
         const colMap = {};
-        const postData = {
+        var postData = {
             "app": "chrome_plugin",
             "records": []
         }
@@ -92,36 +92,39 @@ class BaiduDataCollector extends BasePluginComponent {
         }
 
         // 数据采集
-        $(".fy-table-tbody:last tr").each((i, v) => {
-            let record = {
-                "event": "baidu_ad_data",
-                "data": {
-                    "platform": "baidu",
-                    "campaign_type": "search",
-                    "campaign_id": "",
-                    "account": $(".header-operator-name").text()
-                },
-                "timestamp": new Date().getTime()
-            };
-            $(v).children("td").each((i, v) => {
-                if (colMap[i] && (colMap[i] === "spend" || colMap[i] === "impression" || colMap[i] === "click")) {
-                    record.data[colMap[i]] = Number($(v).find("div span").text());
-                } else if (colMap[i]) {
-                    record.data[colMap[i]] = $(v).find("div span").text();
-                }
-            })
-            postData.records.push(record);
+        const trs = $(".fy-table-tbody:last tr");
+        trs.each((i, v) => {
+            if (i < trs.length - 1) {
+                let record = {
+                    "event": "baidu_ad_data",
+                    "data": {
+                        "platform": "baidu",
+                        "campaign_type": "search",
+                        "campaign_id": "",
+                        "account": $(".header-operator-name").text()
+                    },
+                    "timestamp": new Date().getTime()
+                };
+                $(v).children("td").each((i, v) => {
+                    if (colMap[i] && (colMap[i] === "spend" || colMap[i] === "impression" || colMap[i] === "click")) {
+                        record.data[colMap[i]] = Number($(v).find("div span").text());
+                    } else if (colMap[i]) {
+                        record.data[colMap[i]] = $(v).find("div span").text();
+                    }
+                })
+                postData.records.push(record);
+            }
         })
 
         // 控制台测试
         console.log(postData.records);
 
         // 提交数据
-        postData.records = JSON.stringify(postData.records);
         $.ajax({
             url: "https://openapi.insta360.com/data_collection/v1/collect",
             method: "POST",
-            data: postData,
+            data: JSON.stringify(postData),
+            contentType: 'application/json;charset=utf-8',
             success: function () {
                 if (!$("input:last").prop("disabled")) {
                     alert("当前页数据抓取成功, 请点击下一页继续抓取");

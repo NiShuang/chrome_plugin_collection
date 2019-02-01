@@ -44,13 +44,14 @@ class TaobaoDataCollector extends BasePluginComponent {
 
     let postData = {
       "app": "chrome_plugin",
-      "records": JSON.stringify(records)
+      "records": records
     }
 
     $.ajax({
       url: "https://openapi.insta360.com/data_collection/v1/collect",
       method: "POST",
-      data: postData,
+      contentType: 'application/json;charset=utf-8',
+      data: JSON.stringify(postData),
       success: function () {
         alert("数据抓取成功");
       },

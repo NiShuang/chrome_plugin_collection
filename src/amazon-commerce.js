@@ -70,13 +70,14 @@ class BaiduDataCollector extends BasePluginComponent {
 
     let postData = {
       "app": "chrome_plugin",
-      "records": JSON.stringify(records)
+      "records": records
     }
 
     $.ajax({
       url: "https://openapi.insta360.com/data_collection/v1/collect",
       method: "POST",
-      data: postData,
+      data: JSON.stringify(postData),
+      contentType: 'application/json;charset=utf-8',
       success: function () {
         alert("数据抓取成功");
       },

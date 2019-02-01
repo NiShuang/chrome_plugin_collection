@@ -69,11 +69,11 @@ class DataCollector extends BasePluginComponent {
     console.log(postForm.records);
 
     // 提交数据
-    postForm.records = JSON.stringify(postForm.records);
     $.ajax({
       url: "https://openapi.insta360.com/data_collection/v1/collect",
       method: "POST",
-      data: postForm,
+      contentType: 'application/json;charset=utf-8',
+      data: JSON.stringify(postForm),
       success: function () {
         console.log("当前页抓取成功")
       },
