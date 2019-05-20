@@ -44,11 +44,11 @@ class BaiduDataCollector extends BasePluginComponent {
         }
 
         // 条件筛选, 时间单位：分日，细分： 无
-        if (!$(".unitTime-dropdown-box-container > button > span").text().trim().includes("分日")) {
+        if (!$(".unitTime-dropdown-box-container > button").text().trim().includes("分日")) {
             alert("时间单位请选择分日");
             return;
         }
-        const split = $(".splitDimension-dropdown-box-container > button > span").text().trim() 
+        const split = $(".splitDimension-dropdown-box-container > button").text().trim() 
         if (!(split.includes("无")||split === "细分")) {
             alert("细分请选择无");
             return;
@@ -56,7 +56,7 @@ class BaiduDataCollector extends BasePluginComponent {
 
         // 数据完整性判断, 数据包括: 日期、推广单元、推广单元id（在元素属性里）、展现、点击、消费
         var cols = 0;
-        $(".fy-table-thead:last tr th").each((i, v) => {
+        $(".new-fc-one-table-thead:last tr th").each((i, v) => {
             switch ($(v).find("span div div:first span").text().trim()) {
                 case "日期": {
                     colMap[i] = "date";
@@ -92,7 +92,7 @@ class BaiduDataCollector extends BasePluginComponent {
         }
 
         // 数据采集
-        const trs = $(".fy-table-tbody:last tr");
+        const trs = $(".new-fc-one-table-tbody:last tr");
         trs.each((i, v) => {
             if (i < trs.length - 1) {
                 let record = {
