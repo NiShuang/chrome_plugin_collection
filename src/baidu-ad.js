@@ -17,6 +17,7 @@ class BaiduDataCollector extends BasePluginComponent {
                 "platform": "baidu",  // 写死。固定不变
                 "account": null,
                 "date": null,
+                "plan": null,
                 "campaign_id": null,
                 "campaign_name": null,
                 "campaign_type": "search",   // 写死，固定不变
@@ -54,12 +55,17 @@ class BaiduDataCollector extends BasePluginComponent {
             return;
         }
 
-        // 数据完整性判断, 数据包括: 日期、推广单元、推广单元id（在元素属性里）、展现、点击、消费
+        // 数据完整性判断, 数据包括: 日期、推广计划、推广单元、展现、点击、消费
         var cols = 0;
         $(".new-fc-one-table-thead:last tr th").each((i, v) => {
             switch ($(v).find("span div div:first span").text().trim()) {
                 case "日期": {
                     colMap[i] = "date";
+                    cols++;
+                    break
+                }
+                case "推广计划": {
+                    colMap[i] = "plan";
                     cols++;
                     break
                 }
@@ -86,8 +92,8 @@ class BaiduDataCollector extends BasePluginComponent {
                 default: break
             }
         })
-        if (cols !== 5) {
-            alert("请点击自定义列添加完整的数据, 包括: 日期，推广单元，展现，点击，消费");
+        if (cols !== 6) {
+            alert("请点击自定义列添加完整的数据, 包括: 日期，推广计划，推广单元，展现，点击，消费");
             return;
         }
 
