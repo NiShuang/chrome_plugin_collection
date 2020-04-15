@@ -45,36 +45,65 @@ class SycmDataCollector extends BasePluginComponent {
       console.log(dateRange);
       let planName = $(".ant-select-selection-selected-value").eq(0).text();
 
-      let api = "https://sycm.taobao.com/flow/v3/media/report/chain/overview/trend.json";
-      let params = {
-          dateType: "range",
-          dateRange: dateRange,
+      let parts = dateRange.split("|");
+      let startDate = parts[0];
+      let endDate = parts[1];
+      let startStr = startDate.replace(/-/g, '/');
+      let endStr = endDate.replace(/-/g, '/');
+
+      let start = new Date(startStr);
+      let end = new Date(endStr);
+      let days = parseInt(( end- start)/ (1000 * 60 * 60 * 24));
+
+      let timestamp = new Date().getTime();
+
+      for (var j = 0; j < days; j ++) {
+        start.setDate(start.getDate() + 1);
+        let date = start;
+        var year = date.getFullYear(); 
+        var month =(date.getMonth() + 1).toString(); 
+        var day = (date.getDate()).toString();  
+        if (month.length == 1) { 
+            month = "0" + month; 
+        } 
+        if (day.length == 1) { 
+            day = "0" + day; 
+        }
+        let dateStr = year + "-" + month + "-" + day;
+        console.log(dateStr);
+        let api = "https://sycm.taobao.com/flow/v3/media/report/list/unit.json";
+        let params = {
+          dateType: "day",
+          dateRange: dateStr + "|" + dateStr,
+          pageSize: 100,
+          page: 1,
           indexCode: "paySuccCnt,paySuccAmt",
           planId: planId,
           isAlldays: false
-      }
-      let timestamp = new Date().getTime();
-      $.ajax({
+        }
+
+        $.ajax({
           url: api,
           method: "GET",
           contentType: 'application/json;charset=utf-8',
           data: params,
           success: function(res) {
-            let data = res.data;
-            let statDate = data.statDate;
-            let paySuccCnt = data.paySuccCnt;
-            let paySuccAmt = data.paySuccAmt;
+            console.log(res);
+            let data = res.data.data;
             let records = [];
-            for(let i=0; i<statDate.length; i++) {
+            for(let i=0; i<data.length; i++) {
+              let item = data[i];
               records.push({
                 "event": "sycm_order_data",
                 timestamp,
                 "data": {
-                  "date": statDate[i],
-                  "payCount": paySuccCnt[i],
-                  "payAmount": paySuccAmt[i],
+                  "date": item.statDate.value,
+                  "payCount": item.paySuccCnt.value,
+                  "payAmount": item.paySuccAmt.value,
                   "planId": planId,
-                  "planName": planName
+                  "planName": planName,
+                  "unitId": item.unitId.value,
+                  "unitName": item.name.value
                 }
               });
             }
@@ -90,7 +119,7 @@ class SycmDataCollector extends BasePluginComponent {
               contentType: 'application/json;charset=utf-8',
               data: JSON.stringify(postData),
               success: function() {
-                alert(planName + " " + dateRange + " " + "成交数据抓取成功");
+                console.log(planName + " " + dateStr + " " + "成交数据抓取成功");
               },
               error: function() {
                 alert("数据抓取失败，请稍后重试");
@@ -98,7 +127,10 @@ class SycmDataCollector extends BasePluginComponent {
             }); 
             console.log(postData);
           }
-      });
+        });
+      }
+      alert(planName + " " + dateRange + " " + "成交数据抓取成功");
+
   }
 }
 
