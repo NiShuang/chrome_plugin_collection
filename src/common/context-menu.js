@@ -33,6 +33,9 @@ const ContextMenus = {
     },
     GUANGXIAOBAO_ORDER: {
         key: "guangxiaobao-order", title: "抓取【广效宝-订单】数据"
+    },
+    SYCM_ORDER: {
+        key: "sycm-order", title: "抓取【生意参谋-成交】数据"
     }
 }
 

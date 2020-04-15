@@ -37,7 +37,8 @@
             ],
             "js": [
                 "assets/jquery.min.js",
-                "js/tmall-commerce.js"
+                "js/tmall-commerce.js",
+                "js/sycm-order.js"
             ],
             "run_at": "document_end"
         },

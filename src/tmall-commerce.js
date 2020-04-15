@@ -3,9 +3,18 @@ import { ContextMenus, ContextMenuConfig } from './common/context-menu'
 
 class TaobaoDataCollector extends BasePluginComponent {
 
+  constructor() {
+    super();
+    this.test = this.test.bind(this);
+  }
+
+  onFailToHandle() {
+    return;
+  }
+
   getContextMenuConfig() {
     return [
-      new ContextMenuConfig(ContextMenus.TAMLL_COMMERCE, this.test)
+      new ContextMenuConfig(ContextMenus.TAMLL_COMMERCE, this.test),
     ];
   }
 
@@ -13,7 +22,7 @@ class TaobaoDataCollector extends BasePluginComponent {
     let theads = $(".preview-table-container .oui-table-wrapper .preview-table .ant-spin-nested-loading .ant-spin-container .ant-table .ant-table-content .ant-table-scroll .ant-table-body table>thead tr th");
     let theadsArr = [];
     let dataCount = $(".preview-table-container .oui-table-wrapper .preview-table .ant-spin-nested-loading .ant-spin-container .ant-table .ant-table-content .ant-table-scroll .ant-table-body table>tbody tr.ant-table-row-level-0").length;
-    
+
     if(dataCount == 0) {
       alert("请选择 取数->我的报表->个人报表【数据采集报表】->预览");
       return;
