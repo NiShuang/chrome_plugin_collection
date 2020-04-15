@@ -129,8 +129,7 @@ class SycmDataCollector extends BasePluginComponent {
           }
         });
       }
-      alert(planName + " " + dateRange + " " + "成交数据抓取成功");
-
+      alert(planName + " " + dateRange + " " + "成交数据抓取中");
   }
 }
 
