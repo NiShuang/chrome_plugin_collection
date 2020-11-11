@@ -39,26 +39,26 @@ class BaiduDataCollector extends BasePluginComponent {
             return;
         }
 
-        if (!window.location.href.includes("adgroup")) {
-            alert("请选择 报告 -> 常用报告 -> 单元报告");
+        if (!window.location.href.toLowerCase().includes("adgroup")) {
+            alert("请选择 数据报告 -> 推广报告 -> 单元报告");
             return;
         }
 
         // 条件筛选, 时间单位：分日，细分： 无
-        if (!$(".unitTime-dropdown-box-container > button").text().trim().includes("分日")) {
+        if (!$(".one-select-selection-selected-value").attr("title").includes("分日")) {
             alert("时间单位请选择分日");
             return;
         }
-        const split = $(".splitDimension-dropdown-box-container > button").text().trim() 
-        if (!(split.includes("无")||split === "细分")) {
+        const split = $(".report-sdk-table-split-container > span > span").text().trim() 
+        if (split.length > 0) {
             alert("细分请选择无");
             return;
         }
 
         // 数据完整性判断, 数据包括: 日期、推广计划、推广单元、展现、点击、消费
         var cols = 0;
-        $(".new-fc-one-table-thead:last tr th").each((i, v) => {
-            switch ($(v).find("span div div:first span").text().trim()) {
+        $(".one-table-thead:last tr th").each((i, v) => {
+            switch ($(v).find("span div div:first div").text().trim()) {
                 case "日期": {
                     colMap[i] = "date";
                     cols++;
@@ -98,7 +98,8 @@ class BaiduDataCollector extends BasePluginComponent {
         }
 
         // 数据采集
-        const trs = $(".new-fc-one-table-tbody:last tr");
+        const accuont = $(".one-ui-pro-nav-profile-content-name").text();
+        const trs = $(".one-table-tbody:last tr");
         trs.each((i, v) => {
             if (i < trs.length - 1) {
                 let record = {
@@ -107,15 +108,15 @@ class BaiduDataCollector extends BasePluginComponent {
                         "platform": "baidu",
                         "campaign_type": "search",
                         "campaign_id": "",
-                        "account": $(".header-operator-name").text()
+                        "account": accuont
                     },
                     "timestamp": new Date().getTime()
                 };
                 $(v).children("td").each((i, v) => {
                     if (colMap[i] && (colMap[i] === "spend" || colMap[i] === "impression" || colMap[i] === "click")) {
-                        record.data[colMap[i]] = Number($(v).find("div span").text());
+                        record.data[colMap[i]] = Number($(v).find("div span").text().replace(",", ""));
                     } else if (colMap[i]) {
-                        record.data[colMap[i]] = $(v).find("div span").text();
+                        record.data[colMap[i]] = $(v).find("span").text();
                     }
                 })
                 postData.records.push(record);
