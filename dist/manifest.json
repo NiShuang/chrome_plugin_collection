@@ -128,6 +128,16 @@
                 "js/guangxiaobao-order.js"
             ],
             "run_at": "document_end"
+        },
+        {
+            "matches": [
+                "https://s.taobao.com/search*"
+            ],
+            "js": [
+                "assets/jquery.min.js",
+                "js/taobao-sales.js"
+            ],
+            "run_at": "document_end"
         }
     ],
     // 权限申请

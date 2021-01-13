@@ -36,6 +36,9 @@ const ContextMenus = {
     },
     SYCM_ORDER: {
         key: "sycm-order", title: "抓取【生意参谋-成交】数据"
+    },
+    TAOBAO_SALES: {
+        key: "taobao-salse", title: "抓取【淘宝-销量】数据"
     }
 }
 
