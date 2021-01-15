@@ -23,7 +23,7 @@ class TaobaoSalesCollector extends BasePluginComponent {
       "app": "chrome_plugin",
       "records": []
     }
-    const product = $("input.search-combobox-input").eq(0).attr("value").replace("+", " ");
+    const product = $("input.search-combobox-input").eq(0).attr("value").replace(/\+/g, " ");
     const items = $("#mainsrp-itemlist").find(".item");
     console.log(items.length)
     items.each((i, v) => {
